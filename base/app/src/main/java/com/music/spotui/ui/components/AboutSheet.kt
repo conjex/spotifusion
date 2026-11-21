@@ -71,7 +71,7 @@ fun AboutSheet(onDismiss: () -> Unit) {
             Text(stringResource(R.string.about_free), color = Color(0xFFB3B3B3), fontSize = 13.sp,
                 modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 12.dp, bottom = 8.dp))
             AboutRow("Links", "guns.lol/conjex") { openUrl(context, LINKS_URL) }
-            AboutRow("conjexed", "github.com/conjex") { openUrl(context, GITHUB_PROFILE_URL) }
+            AboutRow("Discord", "@conjexed") { }
             Text("Made with help of AI", color = Color(0xFFB3B3B3), fontSize = 13.sp,
                 modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 14.dp, bottom = 12.dp))
             GitHubSponsorButton(Modifier.padding(start = 20.dp, end = 20.dp, top = 10.dp), label = "Open on GitHub") { openUrl(context, GITHUB_PROFILE_URL) }
