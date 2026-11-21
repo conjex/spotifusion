@@ -39,6 +39,21 @@ private const val LOG = "Myspoti"
 private const val SESSION_WAIT_MS = 6_000L
 
 /**
+ * A session probe the page never answered (its bridge still booting after the sign-in redirect)
+ * gets this long overall before the sign-in page is restored. The page gets one unhurried chance
+ * instead of the login page reloading over it and starting it over — the reported "stuck on the
+ * Web Player after signing in".
+ */
+private const val SESSION_UNKNOWN_WAIT_MS = 45_000L
+
+/**
+ * One session probe never waits longer than this. The bridge's own timeout is 20 s, which let a
+ * single probe stretch the [SESSION_WAIT_MS] countdown — counted in loop turns, not wall clock —
+ * into minutes with the Web Player in front.
+ */
+private const val PROBE_TIMEOUT_MS = 4_000L
+
+/**
  * The app's only screen host: the Compose UI, with the Web Player page attached behind it.
  * The page comes to the front only to sign in, on Spotify's own login pages.
  */
@@ -167,7 +182,8 @@ class MainActivity : AppCompatActivity() {
      * The address is not a session. The page comes back to open.spotify.com while its token is
      * still anonymous when the login never finished (the e-mail step that hangs — the reported
      * "stuck on the e-mail screen"), and hiding the page on that alone left a spinner that never
-     * stopped. The return is bounded: no token after [SESSION_WAIT_MS], the login page comes back.
+     * stopped. The return is bounded: a token answering anonymous for [SESSION_WAIT_MS], or no
+     * answer at all for [SESSION_UNKNOWN_WAIT_MS], brings the login page back.
      */
     private fun watchLoginReturn() {
         lifecycleScope.launch {
@@ -180,19 +196,37 @@ class MainActivity : AppCompatActivity() {
                 // The login page therefore stays in FRONT until a real token exists.
                 loginWait?.cancel()
                 loginWait = launch {
-                    var waited = 0L
-                    while (waited < SESSION_WAIT_MS) {
-                        if (runCatching { MyspotiRuntime.isSignedIn() }.getOrDefault(false)) {
+                    // "No session" comes in two kinds that shared one countdown: a token that
+                    // answers ANONYMOUS (the sign-in really did not complete — the short clock,
+                    // as before) and a probe with no answer at all (the page's bridge is still
+                    // booting — the long clock, and wall-clock measured, so a page that never
+                    // answers cannot stretch the wait into minutes).
+                    var anonymousMs = 0L
+                    var unknownMs = 0L
+                    while (true) {
+                        val started = System.currentTimeMillis()
+                        val probe = try {
+                            kotlinx.coroutines.withTimeoutOrNull(PROBE_TIMEOUT_MS) { MyspotiRuntime.isSignedIn() }
+                        } catch (e: kotlinx.coroutines.CancellationException) {
+                            throw e
+                        } catch (e: Exception) {
+                            null
+                        }
+                        if (probe == true) {
                             android.util.Log.d(LOG, "session established: player shown")
                             hideLogin()
                             return@launch
                         }
                         // The countdown only runs while the user is looking at the app: away to read
                         // the e-mail, the sign-in page must not be reset under them.
-                        if (lifecycle.currentState.isAtLeast(androidx.lifecycle.Lifecycle.State.RESUMED)) waited += 500
+                        if (lifecycle.currentState.isAtLeast(androidx.lifecycle.Lifecycle.State.RESUMED)) {
+                            val elapsed = System.currentTimeMillis() - started
+                            if (probe == false) anonymousMs += elapsed else unknownMs += elapsed
+                        }
+                        if (anonymousMs >= SESSION_WAIT_MS || unknownMs >= SESSION_UNKNOWN_WAIT_MS) break
                         kotlinx.coroutines.delay(500)
                     }
-                    android.util.Log.d(LOG, "no session ${SESSION_WAIT_MS / 1000}s after the player came back: sign-in page restored")
+                    android.util.Log.d(LOG, "no session after the player came back (anonymous ${anonymousMs / 1000} s, no answer ${unknownMs / 1000} s): sign-in page restored")
                     // The page may now be the anonymous player: send it back to the e-mail step so the
                     // user is not left where nothing plays.
                     if (!showingLogin) showLogin() else MyspotiRuntime.host.openLogin()
