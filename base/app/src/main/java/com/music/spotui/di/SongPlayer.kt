@@ -959,7 +959,7 @@ object SongPlayer {
                     fallbackInFlightTrackId = ""
                     if (localTrack != null) {
                         val ctxUri = lastRequestedContextUri.ifBlank { currentContextUri }
-                        val ctxName = knownContextName(ctxUri).ifBlank { album.ifBlank { "Spotifusion" } }
+                        val ctxName = knownContextName(ctxUri).ifBlank { album.ifBlank { "sigma spotify" } }
                         currentTrackId = trackId
                         LocalPlayer.play(
                             list = listOf(localTrack),

@@ -402,7 +402,7 @@ private fun UpdateDialog(
                 modifier = Modifier.padding(top = 18.dp),
             )
             androidx.compose.material3.Text(
-                "Spotifusion $version", color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.7f),
+                "sigma spotify $version", color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.7f),
                 fontFamily = com.music.spotui.ui.theme.AppSans, fontSize = 15.sp, modifier = Modifier.padding(top = 6.dp),
             )
             // What's new (the release's CHANGELOG section), scrollable if long.

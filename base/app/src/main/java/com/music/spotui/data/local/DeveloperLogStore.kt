@@ -83,7 +83,7 @@ object DeveloperLogStore {
     }
 
     fun formatAll(includeEngineLog: Boolean = true): String = buildString {
-        appendLine("=== Spotifusion Developer Log ===")
+        appendLine("=== sigma spotify Developer Log ===")
         val snapshot = synchronized(this@DeveloperLogStore) { entries.toList() }
         if (snapshot.isEmpty()) {
             appendLine("(No developer events recorded in this session)")

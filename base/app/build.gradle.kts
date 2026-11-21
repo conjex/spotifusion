@@ -26,7 +26,7 @@ android {
     val beta = findProperty("appVersionName") == null || version.contains("-")
     defaultConfig {
         applicationId = "com.spotifusion.app"
-        manifestPlaceholders["appLabel"] = "Spotifusion"
+        manifestPlaceholders["appLabel"] = "sigma spotify"
         minSdk = 29
         targetSdk = 36
         // CI release builds pass the tag's version (-PappVersionName / -PappVersionCode).
@@ -72,7 +72,7 @@ android {
         debug {
             // Installs next to the release apps (own data, own sign-in).
             applicationIdSuffix = ".dev"
-            manifestPlaceholders["appLabel"] = "Spotifusion"
+            manifestPlaceholders["appLabel"] = "sigma spotify"
         }
         release {
             // Real key when provided (CI releases); otherwise the debug key, so a local

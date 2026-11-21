@@ -1,7 +1,7 @@
-# Spotifusion
+# sigma spotify
 
 <p align="center">
-  <img src="docs/brand/myspoti-logo-512.png" alt="Spotifusion Logo" width="120" style="border-radius: 24px;">
+  <img src="docs/brand/myspoti-logo-512.png" alt="sigma spotify Logo" width="120" style="border-radius: 24px;">
 </p>
 
 <p align="center">
@@ -46,7 +46,7 @@
 
 ## Overview
 
-**Spotifusion** is a native Jetpack Compose Android music player engineered to deliver an authentic, 1:1 Spotify UI experience combined with ad-free playback, offline downloads, real-time synced lyrics, and synchronized music videos.
+**sigma spotify** is a native Jetpack Compose Android music player engineered to deliver an authentic, 1:1 Spotify UI experience combined with ad-free playback, offline downloads, real-time synced lyrics, and synchronized music videos.
 
 Playback operates through a lightweight, headless official Spotify Web Player running in a background WebView (`:host-android`). The native interface communicates directly with Spotify's catalog and metadata services for lightning-fast navigation, while plays register to your account normally.
 
@@ -112,7 +112,7 @@ The compiled release APK will be generated at:
 
 ## Credits & Acknowledgements
 
-Spotifusion is built on top of incredible open-source projects across the community:
+sigma spotify is built on top of incredible open-source projects across the community:
 
 - **[SpotiDuck](https://github.com/SpotiDuck)** — Inspiration, design concepts, and client optimizations.
 - **[Myspoti / Spotui](https://github.com/kota-zo/myspoti)** (GPL-3.0) — The foundational Web Player WebView bridge architecture, Compose client components, and catalog interfaces by kota-zo and the MetrolistGroup.
@@ -135,7 +135,7 @@ Full copyright notices and third-party licenses are documented in [`THIRD_PARTY_
 
 ## Disclaimer
 
-Spotifusion is an open-source educational project developed for pair-programming and media playback research. Spotifusion is **not** affiliated with, endorsed by, or associated with Spotify AB. Spotify is a registered trademark of Spotify AB. If you enjoy the music, please consider supporting artists directly through Spotify Premium or purchasing their music.
+sigma spotify is an open-source educational project developed for pair-programming and media playback research. sigma spotify is **not** affiliated with, endorsed by, or associated with Spotify AB. Spotify is a registered trademark of Spotify AB. If you enjoy the music, please consider supporting artists directly through Spotify Premium or purchasing their music.
 
 ---
 
